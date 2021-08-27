@@ -1,19 +1,14 @@
-package com.udacity.politcalpreparedness.Launch
+package com.udacity.politcalpreparedness.launch
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import com.udacity.politcalpreparedness.R
 import com.udacity.politcalpreparedness.databinding.FragmentLaunchBinding
 
-/**
- * A simple [Fragment] subclass.
- * Use the [LaunchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class LaunchFragment : Fragment() {
     private var _binding: FragmentLaunchBinding? = null
 
@@ -24,21 +19,20 @@ class LaunchFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentLaunchBinding.inflate(inflater, container, false)
 
-        binding.upcomingButton.setOnClickListener { upComing() }
-        binding.representativesButton.setOnClickListener { myRepresentatives() }
+
+        //The complete onClickListener with Navigation using createNavigateOnClickListener
+        binding.upcomingButton.setOnClickListener(
+            Navigation.createNavigateOnClickListener(R.id.action_launchFragment_to_electionsFragment)
+        )
+
+        binding.representativeButton.setOnClickListener(
+            Navigation.createNavigateOnClickListener(R.id.action_launchFragment_to_representativeFragment)
+        )
 
         return binding.root
-    }
-
-    fun upComing() {
-
-    }
-
-    fun myRepresentatives() {
-
     }
 
     override fun onDestroyView() {

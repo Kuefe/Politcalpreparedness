@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Launch.LaunchFragment">
+    tools:context=".launch.LaunchFragment">
 
     <ImageView
         android:id="@+id/imageView"
@@ -21,10 +21,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/upcoming_elections"
-        app:layout_constraintBottom_toTopOf="@+id/representatives_button" />
+        app:layout_constraintBottom_toTopOf="@+id/representative_button" />
 
     <Button
-        android:id="@+id/representatives_button"
+        android:id="@+id/representative_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/find_my_representatives"

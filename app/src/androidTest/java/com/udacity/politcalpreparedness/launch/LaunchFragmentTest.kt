@@ -1,4 +1,4 @@
-package com.udacity.politcalpreparedness.Launch
+package com.udacity.politcalpreparedness.launch
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
