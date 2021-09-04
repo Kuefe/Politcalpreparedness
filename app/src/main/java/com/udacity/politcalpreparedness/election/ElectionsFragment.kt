@@ -3,18 +3,15 @@ package com.udacity.politcalpreparedness.election
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.udacity.politcalpreparedness.election.adapter.ElectionListAdapter
 
 class ElectionsFragment : Fragment() {
     /**
      * Lazily initialize our [OverviewViewModel].
      */
-    private val viewModel: ElectionsViewModel by lazy {
-        ViewModelProvider(this).get(ElectionsViewModel::class.java)
-    }
+    private lateinit var viewModel: ElectionsViewModel
+    private lateinit var viewModelFactory: ElectionsViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,12 +19,15 @@ class ElectionsFragment : Fragment() {
     ): View? {
         val binding =
             com.udacity.politcalpreparedness.databinding.FragmentElectionBinding.inflate(inflater)
+        viewModelFactory = ElectionsViewModelFactory()
+
+        viewModel = ViewModelProvider(this, viewModelFactory)
+            .get(ElectionsViewModel::class.java)
+        // Giving the binding access to the ElectionViewModel
+        binding.electionsViewModel = viewModel
 
         // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
         binding.lifecycleOwner = this
-
-        // Giving the binding access to the ElectionViewModel
-        binding.electionsViewModel = viewModel
 
         // Sets the adapter of the upcoming ElectionView RecyclerView with clickHandler lambda that
         // tells the viewModel when a election is clicked
