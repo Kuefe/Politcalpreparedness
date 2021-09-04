@@ -1,48 +1,57 @@
 package com.udacity.politcalpreparedness.election
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
+import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.udacity.politcalpreparedness.R
-import com.udacity.politcalpreparedness.databinding.FragmentElectionBinding
+import androidx.navigation.fragment.findNavController
 import com.udacity.politcalpreparedness.election.adapter.ElectionListAdapter
 
 class ElectionsFragment : Fragment() {
-    lateinit var viewModel: ElectionsViewModel
-    private lateinit var binding: FragmentElectionBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    /**
+     * Lazily initialize our [OverviewViewModel].
+     */
+    private val viewModel: ElectionsViewModel by lazy {
+        ViewModelProvider(this).get(ElectionsViewModel::class.java)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //Inflating and Returning the View with DataBindingUtil
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_election, container, false
-        )
+        val binding =
+            com.udacity.politcalpreparedness.databinding.FragmentElectionBinding.inflate(inflater)
 
-        // Get the viewmodel
-        viewModel = ViewModelProvider(this).get(ElectionsViewModel::class.java)
-        binding.electionViewModel = viewModel
+        // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
+        binding.lifecycleOwner = this
 
-        // Click on an entry of a upcoming election
-        binding.upcomingRecycler.adapter = ElectionListAdapter(ElectionListAdapter.ElectionListener {
-            viewModel.displayElectionDetails(it)
-        })
+        // Giving the binding access to the ElectionViewModel
+        binding.electionsViewModel = viewModel
 
-        // Click on a entry of a saved election
-        binding.savedRecycler.adapter = ElectionListAdapter(ElectionListAdapter.ElectionListener {
-            viewModel.displayElectionDetails(it)
-        })
-        
+        // Sets the adapter of the upcoming ElectionView RecyclerView with clickHandler lambda that
+        // tells the viewModel when a election is clicked
+        binding.upcomingRecycler.adapter =
+            ElectionListAdapter(ElectionListAdapter.ElectionListener {
+                viewModel.displayVoterInfo(it)
+            })
+
+//        // Observe the navigateToSelectedProperty LiveData and Navigate when it isn't null
+//        // After navigating, call displayPropertyDetailsComplete() so that the ViewModel is ready
+//        // for another navigation event.
+//        viewModel.navigateToSelectedUpcomingElection.observe(viewLifecycleOwner, Observer {
+//            if (null != it) {
+//                // Must find the NavController from the Fragment
+//                this.findNavController().navigate(
+//                    ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment()
+//                )
+//                // Tell the ViewModel we've made the navigate call to prevent multiple navigation
+//                // Reset state to make sure we only navigate once, even if the device
+//                // has a configuration change.
+//                viewModel.displayPropertyDetailsComplete()
+//            }
+//        })
+
         return binding.root
     }
 }

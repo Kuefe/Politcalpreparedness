@@ -3,25 +3,14 @@ package com.udacity.politcalpreparedness.election
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.squareup.moshi.Json
+import androidx.lifecycle.viewModelScope
 import com.udacity.politcalpreparedness.network.CivicsApi
-import com.udacity.politcalpreparedness.network.CivicsApiService
-import com.udacity.politcalpreparedness.network.Elections
 import com.udacity.politcalpreparedness.network.models.Election
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 //TODO: Construct ViewModel and provide election datasource
 class ElectionsViewModel : ViewModel() {
-
-    // Live data val for upcoming elections
-    private val _upcomingElections = MutableLiveData<List<Election>>()
-
-    val upcomingElections: LiveData<List<Election>>
-        get() = _upcomingElections
 
     // Live data val for saved elections
     private val _savedElections = MutableLiveData<List<Election>>()
@@ -30,42 +19,64 @@ class ElectionsViewModel : ViewModel() {
     val savedElections: LiveData<List<Election>>
         get() = _savedElections
 
-    // The internal MutableLiveData String that stores the most recent response
-    private val _response = MutableLiveData<String>()
+    // Internally, we use a MutableLiveData, because we will be updating the List of MarsProperty
+    // with new values
+    private val _upcomingElections = MutableLiveData<List<Election>>()
 
-    // The external immutable LiveData for the response String
-    val response: LiveData<String>
-        get() = _response
+    // The external LiveData interface to the election is immutable, so only this class can modify
+    val upcomingElections: LiveData<List<Election>>
+        get() = _upcomingElections
+
+    /**
+     * Variable that tells the Fragment to navigate to a specific [VoterInfoFragment]
+     *
+     * This is private because we don't want to expose setting this value to the Fragment.
+     */
+
+    private val _navigateToSelectedUpcomingElection = MutableLiveData<Election>()
+
+    /**
+     * If this is non-null, immediately navigate to [SleepQualityFragment] and call [displayPropertyDetailsComplete]
+     */
+    val navigateToSelectedUpcomingElection: LiveData<Election>
+        get() = _navigateToSelectedUpcomingElection
+
+    /**
+     * Call this immediately after navigating to [SleepQualityFragment]
+     *
+     * It will clear the navigation request, so if the user rotates their phone it won't navigate
+     * twice.
+     */
+    fun displayPropertyDetailsComplete() {
+        _navigateToSelectedUpcomingElection.value = null
+    }
+
+    /**
+     * When the property is clicked, set the [_navigateToSelectedUpcomingElection] [MutableLiveData]
+     * @param election The [Election] that was clicked on.
+     */
+    fun displayVoterInfo(election: Election) {
+        _navigateToSelectedUpcomingElection.value = election
+    }
 
     //TODO: Create val and functions to populate live data for upcoming elections from the API and saved elections from local database
 
     //TODO: Create functions to navigate to saved or upcoming election voter info
-    fun displayElectionDetails(election: Election){
 
-    }
 
     init {
-        Timber.i("Timber: init")
-        getElections()
+        Timber.i("Timber: init ElectionViewModel")
+        getElectionsFromNetwork()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        Timber.i("Timber: onCleared")
-    }
-
-    private fun getElections() {
+    private fun getElectionsFromNetwork() {
         Timber.i("Timber: getElections")
-        CivicsApi.retrofitService.getElections().enqueue( object: Callback<Elections> {
-            override fun onFailure(call: Call<Elections>, t: Throwable) {
-                _response.value = "Failure: " + t.message
-                Timber.i("Timber: onFailure "+t.message)
+        viewModelScope.launch {
+            try {
+                _upcomingElections.value = CivicsApi.retrofitService.getElections().elections
+            } catch (e: Exception) {
+                _upcomingElections.value = ArrayList()
             }
-
-            override fun onResponse(call: Call<Elections>, response: Response<Elections>) {
-                _response.value = "Success: ${response.body()} Elections properties retrieved"
-                Timber.i("Timber: onResponse"+_response.value)
-            }
-        })
+        }
     }
 }

@@ -8,6 +8,7 @@ ext {
     version_runner = '1.4.0'
     version_timber = '5.0.1'
     version_loggingInterceptor = '5.0.0-alpha.2'
+    version_glide = '4.12.0'
 }
 buildscript {
     ext {
@@ -15,13 +16,13 @@ buildscript {
         version_core = '1.6.0'
         version_constraint_layout = '2.1.0'
         version_glide = "4.8.0"
-        version_kotlin = '1.5.20'
+        version_kotlin = '1.5.30'
         version_kotlin_serialization = '1.0-M1-1.4.0-rc'
-        version_kotlin_coroutines = '1.5.1-native-mt'
+        version_kotlin_coroutines = '1.5.2-native-mt'
         version_lifecycle_extensions = '2.2.0'
         version_moshi = '1.12.0'
         version_navigation = '2.3.5'
-        version_retrofit = "2.7.2"
+        version_retrofit = '2.9.0'
         version_retrofit_coroutines_adapter = "0.9.2"
         version_recyclerview = "1.2.0-alpha05"
         version_glide = "4.11.0"

@@ -5,6 +5,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Entity(tableName = "election_table")

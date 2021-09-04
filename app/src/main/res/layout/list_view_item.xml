@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="election"
+            name="upcomingElection"
             type="com.udacity.politcalpreparedness.network.models.Election" />
 
     </data>
@@ -21,15 +21,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@+id/start_grid"
             app:layout_constraintTop_toTopOf="@id/top_grid"
+            android:text="@{upcomingElection.name}"
             tools:text="Name" />
-
-        <TextView
-            android:id="@+id/division_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/name_text"
-            app:layout_constraintTop_toTopOf="@id/top_grid"
-            tools:text="Electionday" />
 
         <TextView
             android:id="@+id/electionDay_text"
@@ -38,7 +31,9 @@
             app:layout_constraintBottom_toBottomOf="@id/bottom_grid"
             app:layout_constraintStart_toStartOf="@+id/start_grid"
             app:layout_constraintTop_toBottomOf="@+id/name_text"
-            tools:text="Division" />
+            android:text=".electionDay}"
+            app:electionDay="@{upcomingElection}"
+            tools:text="ElectionDay" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/start_grid"

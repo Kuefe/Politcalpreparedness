@@ -13,7 +13,7 @@ import com.udacity.politcalpreparedness.network.models.Election
  * data, including computing diffs between lists.
  */
 
-class ElectionListAdapter(private val clickListener: ElectionListener) :
+class ElectionListAdapter(val clickListener: ElectionListener) :
     ListAdapter<Election, ElectionListAdapter.ElectionViewHolder>(ElectionDiffCallback) {
 
     /**
@@ -22,13 +22,12 @@ class ElectionListAdapter(private val clickListener: ElectionListener) :
      */
     class ElectionViewHolder(private var binding: ListViewItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(election: Election) {
-            binding.election = election
+        fun bind(item: Election) {
+            binding.upcomingElection = item
             // This is important, because it forces the data binding to execute immediately,
             // which allows the RecyclerView to make the correct view size measurements
             binding.executePendingBindings()
         }
-
     }
 
     override fun onBindViewHolder(holder: ElectionViewHolder, position: Int) {
@@ -75,6 +74,7 @@ class ElectionListAdapter(private val clickListener: ElectionListener) :
     class ElectionListener(val clickListener: (election: Election) -> Unit) {
         fun onClick(election: Election) = clickListener(election)
     }
+
 }
 
 
