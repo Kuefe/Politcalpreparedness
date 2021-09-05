@@ -17,12 +17,15 @@ class ElectionsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val application = requireNotNull(activity).application
+
         val binding =
             com.udacity.politcalpreparedness.databinding.FragmentElectionBinding.inflate(inflater)
-        viewModelFactory = ElectionsViewModelFactory()
+        viewModelFactory = ElectionsViewModelFactory(application)
 
         viewModel = ViewModelProvider(this, viewModelFactory)
             .get(ElectionsViewModel::class.java)
+
         // Giving the binding access to the ElectionViewModel
         binding.electionsViewModel = viewModel
 

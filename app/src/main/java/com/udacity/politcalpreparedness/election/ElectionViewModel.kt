@@ -1,16 +1,21 @@
 package com.udacity.politcalpreparedness.election
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.udacity.politcalpreparedness.database.ElectionDatabase.Companion.getInstance
 import com.udacity.politcalpreparedness.network.CivicsApi
 import com.udacity.politcalpreparedness.network.models.Election
+import com.udacity.politcalpreparedness.representative.ElectionsRepository
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 //TODO: Construct ViewModel and provide election datasource
-class ElectionsViewModel : ViewModel() {
+class ElectionsViewModel(application: Application) : ViewModel() {
+    private val database = getInstance(application)
+    private val electionsRepository = ElectionsRepository(database)
 
     // Live data val for saved elections
     private val _savedElections = MutableLiveData<List<Election>>()
@@ -66,17 +71,10 @@ class ElectionsViewModel : ViewModel() {
 
     init {
         Timber.i("Timber: init ElectionViewModel")
-        getElectionsFromNetwork()
-    }
-
-    private fun getElectionsFromNetwork() {
-        Timber.i("Timber: getElections")
         viewModelScope.launch {
-            try {
-                _upcomingElections.value = CivicsApi.retrofitService.getElections().elections
-            } catch (e: Exception) {
-                _upcomingElections.value = ArrayList()
-            }
+            electionsRepository.getElectionsFromNetwork()
         }
     }
+
+
 }

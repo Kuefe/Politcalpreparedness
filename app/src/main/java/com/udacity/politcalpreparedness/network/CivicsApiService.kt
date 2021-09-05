@@ -6,6 +6,7 @@ import com.udacity.politcalpreparedness.network.jsonadapter.DateAdapter
 import com.udacity.politcalpreparedness.network.jsonadapter.ElectionAdapter
 import com.udacity.politcalpreparedness.network.models.ElectionResponse
 import com.udacity.politcalpreparedness.network.models.VoterInfoResponse
+import kotlinx.coroutines.Deferred
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
@@ -31,7 +32,7 @@ private val retrofit = Retrofit.Builder()
 
 interface CivicsApiService {
     @GET("elections")
-    suspend fun getElections(): ElectionResponse
+    suspend fun getElections(): NetworkElectionContainer
 
     @GET("voterinfo")
     suspend fun getVoterInfo(

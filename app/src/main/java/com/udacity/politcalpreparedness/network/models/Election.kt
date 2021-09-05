@@ -8,10 +8,12 @@ import com.squareup.moshi.Json
 import kotlinx.parcelize.Parcelize
 import java.util.*
 
-@Entity(tableName = "election_table")
+
 data class Election(
-    @PrimaryKey val id: Int,
-    @ColumnInfo(name = "name")val name: String,
-    @ColumnInfo(name = "electionDay")val electionDay: Date,
-    @Embedded(prefix = "division_") @Json(name="ocdDivisionId") val division: Division
+    val id: Int,
+    val name: String,
+    val electionDay: Date,
+    val division_id: String,
+    val division_state: String,
+    val division_country: String
 )
