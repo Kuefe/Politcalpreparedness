@@ -8,6 +8,10 @@ import com.udacity.politcalpreparedness.network.models.Election
 interface ElectionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg elections: DatabaseElection)
+
+    @Query("select * from election_table")
+    fun getElections(): List<DatabaseElection>
+
 /*
     @Insert
     suspend fun insert(election: Election)

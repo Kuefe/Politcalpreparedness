@@ -13,9 +13,21 @@ import com.udacity.politcalpreparedness.network.models.Election
  * data, including computing diffs between lists.
  */
 
-class ElectionListAdapter(val clickListener: ElectionListener) :
-    ListAdapter<Election, ElectionListAdapter.ElectionViewHolder>(ElectionDiffCallback) {
+class ElectionListAdapter(val onClickListener: OnClickListener) :
+    ListAdapter<Election, ElectionListAdapter.ElectionViewHolder>(DiffCallback) {
 
+    /**
+     * The elections that our Adapter will show
+     */
+    var elections: List<Election> = emptyList()
+        set(value) {
+            field = value
+            // For an extra challenge, update this to use the paging library.
+
+            // Notify any registered observers that the data set has changed. This will cause every
+            // element in our RecyclerView to be invalidated.
+            notifyDataSetChanged()
+        }
     /**
      * The ElectionViewHolder constructor takes the binding variable from the associated
      * ListViewItem, which nicely gives it access to the full [Election] information.
@@ -34,7 +46,7 @@ class ElectionListAdapter(val clickListener: ElectionListener) :
 
         val item = getItem(position)
         holder.itemView.setOnClickListener {
-            clickListener.onClick(item)
+            onClickListener.onClick(item)
         }
         holder.bind(item)
     }
@@ -55,7 +67,7 @@ class ElectionListAdapter(val clickListener: ElectionListener) :
         )
     }
 
-    object ElectionDiffCallback : DiffUtil.ItemCallback<Election>() {
+    object DiffCallback : DiffUtil.ItemCallback<Election>() {
         override fun areItemsTheSame(oldItem: Election, newItem: Election): Boolean {
             return newItem == newItem
         }
@@ -71,10 +83,9 @@ class ElectionListAdapter(val clickListener: ElectionListener) :
      * associated with the current item to the [onClick] function.
      * @param clickListener lambda that will be called with the current [Election]
      */
-    class ElectionListener(val clickListener: (election: Election) -> Unit) {
+    class OnClickListener(val clickListener: (election: Election) -> Unit) {
         fun onClick(election: Election) = clickListener(election)
     }
-
 }
 
 

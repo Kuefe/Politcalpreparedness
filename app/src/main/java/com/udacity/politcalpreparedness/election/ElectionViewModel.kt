@@ -6,9 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.udacity.politcalpreparedness.database.ElectionDatabase.Companion.getInstance
-import com.udacity.politcalpreparedness.network.CivicsApi
+import com.udacity.politcalpreparedness.election.repository.ElectionsRepository
 import com.udacity.politcalpreparedness.network.models.Election
-import com.udacity.politcalpreparedness.representative.ElectionsRepository
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -16,21 +15,6 @@ import timber.log.Timber
 class ElectionsViewModel(application: Application) : ViewModel() {
     private val database = getInstance(application)
     private val electionsRepository = ElectionsRepository(database)
-
-    // Live data val for saved elections
-    private val _savedElections = MutableLiveData<List<Election>>()
-
-    // The external immutable LiveData for the AsteroidApiStatus
-    val savedElections: LiveData<List<Election>>
-        get() = _savedElections
-
-    // Internally, we use a MutableLiveData, because we will be updating the List of MarsProperty
-    // with new values
-    private val _upcomingElections = MutableLiveData<List<Election>>()
-
-    // The external LiveData interface to the election is immutable, so only this class can modify
-    val upcomingElections: LiveData<List<Election>>
-        get() = _upcomingElections
 
     /**
      * Variable that tells the Fragment to navigate to a specific [VoterInfoFragment]
@@ -68,11 +52,23 @@ class ElectionsViewModel(application: Application) : ViewModel() {
 
     //TODO: Create functions to navigate to saved or upcoming election voter info
 
+    // The internal MutableLiveData AsteroidApiStatus that stores the most recent response status
+    private val _upcomingElections = MutableLiveData<List<Election>>()
+
+    // The external immutable LiveData for the AsteroidApiStatus
+    val upcomingElections: LiveData<List<Election>>
+        get() = _upcomingElections
+
 
     init {
         Timber.i("Timber: init ElectionViewModel")
         viewModelScope.launch {
-            electionsRepository.getElectionsFromNetwork()
+            try {
+                electionsRepository.getElectionsFromNetwork()
+                _upcomingElections.value = electionsRepository.getElectionList()
+            } catch (e: java.lang.Exception) {
+                _upcomingElections.value = ArrayList()
+            }
         }
     }
 
