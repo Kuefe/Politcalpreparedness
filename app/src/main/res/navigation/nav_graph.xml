@@ -34,5 +34,9 @@
     <fragment
         android:id="@+id/voterInfoFragment"
         android:name="com.udacity.politcalpreparedness.election.VoterInfoFragment"
-        android:label="VoterInfoFragment" />
+        android:label="VoterInfoFragment" >
+        <argument
+            android:name="selectedElection"
+            app:argType="com.udacity.politcalpreparedness.network.models.Election" />
+    </fragment>
 </navigation>

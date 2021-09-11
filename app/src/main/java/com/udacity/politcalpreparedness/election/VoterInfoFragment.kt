@@ -1,11 +1,15 @@
 package com.udacity.politcalpreparedness.election
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.udacity.politcalpreparedness.databinding.FragmentVoterInfoBinding
+import timber.log.Timber
 
 
 class VoterInfoFragment : Fragment() {
@@ -20,6 +24,26 @@ class VoterInfoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val application = requireNotNull(activity).application
+        val binding = FragmentVoterInfoBinding.inflate(inflater)
+
+        binding.lifecycleOwner = this
+
+        val election = VoterInfoFragmentArgs.fromBundle(requireArguments()).selectedElection
+        val viewModelFactory = VoterInfoViewModelFactory(election, application)
+        binding.viewModel = ViewModelProvider(
+            this, viewModelFactory
+        ).get(VoterInfoViewModel::class.java)
+
+        binding.stateLocations.setOnClickListener {
+            loadUrlIntent(1)
+        }
+
+        binding.stateBallot.setOnClickListener {
+            loadUrlIntent(2)
+        }
+
+        return binding.root
         //TODO: Add ViewModel values and create ViewModel
 
         //TODO: Add binding values
@@ -35,17 +59,13 @@ class VoterInfoFragment : Fragment() {
         //TODO: Handle save button UI state
         //TODO: cont'd Handle save button clicks
 
-        val binding =
-            com.udacity.politcalpreparedness.databinding.FragmentVoterInfoBinding.inflate(inflater)
-
-        // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
-        binding.lifecycleOwner = this
-
-        // Giving the binding access to the ElectionViewModel
-        binding.voterInfoViewModel = viewModel
-
-        return binding.root
     }
-
-    //TODO: Create method to load URL intents
+    private fun loadUrlIntent(state: Int) {
+        val url = viewModel.getUrl(state)
+        Timber.i("Timber: url: " + url)
+        val webIntent: Intent = Uri.parse(url).let { webpage ->
+            Intent(Intent.ACTION_VIEW, webpage)
+        }
+        startActivity(webIntent)
+    }
 }

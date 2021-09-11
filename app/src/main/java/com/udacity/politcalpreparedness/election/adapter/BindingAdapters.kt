@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.udacity.politcalpreparedness.election.adapter.ElectionListAdapter
 import com.udacity.politcalpreparedness.network.models.Election
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * When there is no Election data (data is null), hide the [RecyclerView], otherwise show it.
@@ -22,6 +24,8 @@ fun bindRecyclerView(recyclerView: RecyclerView, data: List<Election>?) {
 @BindingAdapter("electionDay")
 fun TextView.setElectionDateFormatted(item: Election?) {
     item?.let {
-        text = item.electionDay.toString()
+        val pattern = "YYYY-MM-dd"
+        val simpleDateFormat = SimpleDateFormat(pattern, Locale.getDefault())
+        text = simpleDateFormat.format(item.electionDay)
     }
 }

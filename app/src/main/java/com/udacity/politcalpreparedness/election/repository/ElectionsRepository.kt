@@ -1,9 +1,5 @@
 package com.udacity.politcalpreparedness.election.repository
 
-import android.provider.ContactsContract
-import android.provider.MediaStore
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.udacity.politcalpreparedness.database.DatabaseElection
 import com.udacity.politcalpreparedness.database.ElectionDatabase
 import com.udacity.politcalpreparedness.database.asDomainModel
@@ -17,7 +13,7 @@ import timber.log.Timber
 class ElectionsRepository(private val database: ElectionDatabase) {
 
     /**
-     * get a List of asteroids from the database an transform then to a domain object
+     * get a List of elections from the database an transform then to a domain object
      */
     suspend fun getElectionList(): List<Election> {
         return withContext(Dispatchers.IO) {

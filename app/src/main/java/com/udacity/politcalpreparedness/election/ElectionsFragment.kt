@@ -6,6 +6,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.udacity.politcalpreparedness.databinding.FragmentElectionBinding
 import com.udacity.politcalpreparedness.election.adapter.ElectionListAdapter
 import com.udacity.politcalpreparedness.network.models.Election
@@ -48,6 +49,18 @@ class ElectionsFragment : Fragment() {
             ElectionListAdapter(ElectionListAdapter.OnClickListener {
                 viewModel.displayVoterInfo(it)
             })
+
+        // Observe the navigateToSelectedProperty LiveData and Navigate when it isn't null
+        // After navigating, call displayPropertyDetailsComplete() so that the ViewModel is ready
+        // for another navigation event.
+        viewModel.navigateToSelectedUpcomingElection.observe(viewLifecycleOwner, Observer {
+            if (null != it) {
+                // Must find the NavController from the Fragment
+                this.findNavController().navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(it))
+                // Tell the ViewModel we've made the navigate call to prevent multiple navigation
+                viewModel.displayPropertyDetailsComplete()
+            }
+        })
 
         return binding.root
     }

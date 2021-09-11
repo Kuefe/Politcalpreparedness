@@ -1,9 +1,7 @@
 package com.udacity.politcalpreparedness.database
 
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.annotation.Nullable
+import androidx.room.*
 import com.udacity.politcalpreparedness.network.models.Division
 import com.udacity.politcalpreparedness.network.models.Election
 import java.util.*
@@ -13,7 +11,7 @@ data class DatabaseElection constructor(
     @PrimaryKey val id: Int,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "electionDay") val electionDay: Date,
-    @Embedded(prefix = "division_") val division: Division
+    @Embedded(prefix = "division_") val division: Division,
 )
 
 fun List<DatabaseElection>.asDomainModel(): List<Election> {

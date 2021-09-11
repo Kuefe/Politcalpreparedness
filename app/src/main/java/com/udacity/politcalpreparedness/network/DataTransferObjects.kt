@@ -1,17 +1,17 @@
 package com.udacity.politcalpreparedness.network
 
+import androidx.room.Ignore
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.udacity.politcalpreparedness.database.DatabaseElection
 import com.udacity.politcalpreparedness.network.models.Division
-import com.udacity.politcalpreparedness.network.models.Election
 import java.util.*
 
 /**
-* DataTransferObjects go in this file. These are responsible for parsing responses from the server
-* or formatting objects to send to the server. You should convert these to domain objects before
-* using them.
-*/
+ * DataTransferObjects go in this file. These are responsible for parsing responses from the server
+ * or formatting objects to send to the server. You should convert these to domain objects before
+ * using them.
+ */
 
 /**
  * ElectionHolder holds a list of Elections.
@@ -36,13 +36,13 @@ data class NetworkElection(
     val id: Int,
     val name: String,
     val electionDay: Date,
-    @Json(name = "ocdDivisionId") val division: Division
+    @Json(name = "ocdDivisionId") val division: Division,
 )
 
 /**
  * Convert Network results to domain objects
  */
-fun NetworkElectionContainer.asDomainModel(): List<Election> {
+/*fun NetworkElectionContainer.asDomainModel(): List<Election> {
     return elections.map {
         Election(
             id = it.id,
@@ -53,7 +53,7 @@ fun NetworkElectionContainer.asDomainModel(): List<Election> {
             division_country = it.division.country
         )
     }
-}
+}*/
 
 /**
  * Convert Network results to database objects
