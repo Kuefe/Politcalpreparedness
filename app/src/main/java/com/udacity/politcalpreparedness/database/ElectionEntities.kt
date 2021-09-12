@@ -37,6 +37,19 @@ fun List<DatabaseElection>.asDomainModel(): List<Election> {
     }
 }
 
+fun List<DatabaseSavedElection>.asDomainModelFollow(): List<Election> {
+    return map {
+        Election(
+            id = it.id,
+            name = it.name,
+            electionDay = it.electionDay,
+            division_id = it.division.id,
+            division_state = it.division.state,
+            division_country = it.division.country
+        )
+    }
+}
+
 fun asDatabaseModel(election: Election): DatabaseSavedElection {
     return DatabaseSavedElection(
         id = election.id,

@@ -57,6 +57,10 @@ class ElectionsViewModel(application: Application) : ViewModel() {
     val upcomingElections: LiveData<List<Election>>
         get() = _upcomingElections
 
+    private val _followElections = MutableLiveData<List<Election>>()
+
+    val followElections: LiveData<List<Election>>
+        get() = _followElections
 
     init {
         Timber.i("Timber: init ElectionViewModel")
@@ -66,6 +70,13 @@ class ElectionsViewModel(application: Application) : ViewModel() {
                 _upcomingElections.value = electionsRepository.getElectionList()
             } catch (e: java.lang.Exception) {
                 _upcomingElections.value = ArrayList()
+            }
+        }
+        viewModelScope.launch {
+            try {
+                _followElections.value = electionsRepository.getFollowElectionList()
+            } catch (e: java.lang.Exception) {
+                _followElections.value = ArrayList()
             }
         }
     }

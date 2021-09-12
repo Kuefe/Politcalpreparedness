@@ -6,6 +6,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.udacity.politcalpreparedness.election.FollowState
 import com.udacity.politcalpreparedness.election.adapter.ElectionListAdapter
+import com.udacity.politcalpreparedness.election.adapter.FollowElectionListAdapter
 import com.udacity.politcalpreparedness.network.models.Election
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,6 +17,17 @@ import java.util.*
 @BindingAdapter("listdata")
 fun bindRecyclerView(recyclerView: RecyclerView, data: List<Election>?) {
     val adapter = recyclerView.adapter as ElectionListAdapter
+    adapter.submitList(data) {
+        recyclerView.scrollToPosition(0)
+    }
+}
+
+/**
+ * When there is no Election data (data is null), hide the [RecyclerView], otherwise show it.
+ */
+@BindingAdapter("listdataFollow")
+fun bindRecyclerViewFollow(recyclerView: RecyclerView, data: List<Election>?) {
+    val adapter = recyclerView.adapter as FollowElectionListAdapter
     adapter.submitList(data) {
         recyclerView.scrollToPosition(0)
     }

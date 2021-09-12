@@ -1,8 +1,6 @@
 package com.udacity.politcalpreparedness.election.repository
 
-import com.udacity.politcalpreparedness.database.DatabaseElection
-import com.udacity.politcalpreparedness.database.ElectionDatabase
-import com.udacity.politcalpreparedness.database.asDomainModel
+import com.udacity.politcalpreparedness.database.*
 import com.udacity.politcalpreparedness.network.CivicsApi
 import com.udacity.politcalpreparedness.network.asDatabaseModel
 import com.udacity.politcalpreparedness.network.models.Election
@@ -20,6 +18,17 @@ class ElectionsRepository(private val database: ElectionDatabase) {
             val electionList: List<DatabaseElection> =
                 database.electionDao.getElections()
             electionList.asDomainModel()
+        }
+    }
+
+    /**
+     * get a List of followed elections from the database an transform then to a domain object
+     */
+    suspend fun getFollowElectionList(): List<Election> {
+        return withContext(Dispatchers.IO) {
+            val electionList: List<DatabaseSavedElection> =
+                database.electionDao.getFollowElections()
+            electionList.asDomainModelFollow()
         }
     }
 

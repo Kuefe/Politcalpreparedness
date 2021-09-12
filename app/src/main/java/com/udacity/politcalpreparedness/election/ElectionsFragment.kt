@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.udacity.politcalpreparedness.databinding.FragmentElectionBinding
 import com.udacity.politcalpreparedness.election.adapter.ElectionListAdapter
+import com.udacity.politcalpreparedness.election.adapter.FollowElectionListAdapter
 import com.udacity.politcalpreparedness.network.models.Election
 
 class ElectionsFragment : Fragment() {
@@ -17,12 +18,6 @@ class ElectionsFragment : Fragment() {
      */
     private lateinit var viewModel: ElectionsViewModel
     private lateinit var viewModelFactory: ElectionsViewModelFactory
-
-    /**
-     * RecyclerView Adapter for converting a list of Elections
-     */
-    private var viewModelAdapter: ElectionListAdapter? = null
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +42,13 @@ class ElectionsFragment : Fragment() {
         // tells the viewModel when a election is clicked
         binding.upcomingRecycler.adapter =
             ElectionListAdapter(ElectionListAdapter.OnClickListener {
+                viewModel.displayVoterInfo(it)
+            })
+
+        // Sets the adapter of the followed ElectionView RecyclerView with clickHandler lambda that
+        // tells the viewModel when a election is clicked
+        binding.savedRecycler.adapter =
+            FollowElectionListAdapter(FollowElectionListAdapter.OnClickListener {
                 viewModel.displayVoterInfo(it)
             })
 
