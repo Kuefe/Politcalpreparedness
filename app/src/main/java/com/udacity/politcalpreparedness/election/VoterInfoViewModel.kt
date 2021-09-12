@@ -5,14 +5,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.udacity.politcalpreparedness.database.ElectionDatabase
+import com.udacity.politcalpreparedness.election.repository.VoterInfoRepository
 import com.udacity.politcalpreparedness.network.CivicsApi
 import com.udacity.politcalpreparedness.network.models.Election
 import com.udacity.politcalpreparedness.network.models.VoterInfoResponse
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+enum class FollowState(val state: Boolean) { FOLLOW(true), UNFOLLOW(false) }
 
-class VoterInfoViewModel(election: Election, app: Application) : ViewModel() {
+class VoterInfoViewModel(election: Election, application: Application) : ViewModel() {
+    private val database = ElectionDatabase.getInstance(application)
+    private val voterInfoRepository = VoterInfoRepository(database)
 
     //TODO: Add live data to hold voter info
     private val _selectedElection = MutableLiveData<Election>()
@@ -39,6 +44,12 @@ class VoterInfoViewModel(election: Election, app: Application) : ViewModel() {
 
     //TODO: Add var and methods to save and remove elections to local database
     //TODO: cont'd -- Populate initial state of save button to reflect proper action based on election saved status
+    // The internal MutableLiveData that stores the status of the most recent request
+    private val _status = MutableLiveData<FollowState>()
+
+    // The external immutable LiveData for the request status
+    val status: LiveData<FollowState>
+        get() = _status
 
     /**
      * Hint: The saved state can be accomplished in multiple ways. It is directly related to how elections are saved/removed from the database.
@@ -53,6 +64,8 @@ class VoterInfoViewModel(election: Election, app: Application) : ViewModel() {
         address =
             _selectedElection.value?.division_state + " " + selectedElection.value?.division_country
         electionId = _selectedElection.value!!.id
+
+        _status.value = FollowState.FOLLOW
 
         getVoterInfosFromNetwork(address, electionId)
     }
@@ -84,5 +97,38 @@ class VoterInfoViewModel(election: Election, app: Application) : ViewModel() {
 
     fun getUrl(state: Int): String {
         return if (state == 1) _votingLocationFinderUrl.value.toString() else _ballotInfoUrl.value.toString()
+    }
+
+    fun switchFollowState() {
+        Timber.i("Timber: switchFollowState")
+        if (_status.value == FollowState.FOLLOW) {
+            followElection()
+            _status.value = FollowState.UNFOLLOW
+        } else {
+            unfollowElection()
+            _status.value = FollowState.FOLLOW
+        }
+    }
+
+    fun followElection(){
+        Timber.i("Timber: followElection")
+        viewModelScope.launch {
+            try {
+                voterInfoRepository.saveElection(_selectedElection.value!!)
+            } catch (e: java.lang.Exception) {
+                Timber.e(e.message)
+            }
+        }
+    }
+
+    fun unfollowElection() {
+        Timber.i("Timber: unfollowElection")
+        viewModelScope.launch {
+            try {
+                voterInfoRepository.deleteElection(_selectedElection.value!!)
+            } catch (e: java.lang.Exception) {
+                Timber.e(e.message)
+            }
+        }
     }
 }

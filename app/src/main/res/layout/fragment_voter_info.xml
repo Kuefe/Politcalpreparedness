@@ -88,6 +88,14 @@
             app:layout_constraintTop_toBottomOf="@id/state_correspondence_header" />
 
         <!-- TODO: Add button to save election to Room -->
+        <Button
+            android:id="@+id/follow_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> viewModel.switchFollowState()}"
+            android:text=".followButton}"
+            app:followButton="@{viewModel.status}"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

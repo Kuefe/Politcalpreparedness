@@ -25,13 +25,13 @@ class ElectionsViewModel(application: Application) : ViewModel() {
     private val _navigateToSelectedUpcomingElection = MutableLiveData<Election>()
 
     /**
-     * If this is non-null, immediately navigate to [SleepQualityFragment] and call [displayPropertyDetailsComplete]
+     * If this is non-null, immediately navigate to [VoterInfoFragment] and call [displayPropertyDetailsComplete]
      */
     val navigateToSelectedUpcomingElection: LiveData<Election>
         get() = _navigateToSelectedUpcomingElection
 
     /**
-     * Call this immediately after navigating to [SleepQualityFragment]
+     * Call this immediately after navigating to [VoterInfoFragment]
      *
      * It will clear the navigation request, so if the user rotates their phone it won't navigate
      * twice.
@@ -52,10 +52,8 @@ class ElectionsViewModel(application: Application) : ViewModel() {
 
     //TODO: Create functions to navigate to saved or upcoming election voter info
 
-    // The internal MutableLiveData AsteroidApiStatus that stores the most recent response status
     private val _upcomingElections = MutableLiveData<List<Election>>()
 
-    // The external immutable LiveData for the AsteroidApiStatus
     val upcomingElections: LiveData<List<Election>>
         get() = _upcomingElections
 

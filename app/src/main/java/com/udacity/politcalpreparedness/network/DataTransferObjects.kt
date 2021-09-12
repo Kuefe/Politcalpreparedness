@@ -39,21 +39,6 @@ data class NetworkElection(
     @Json(name = "ocdDivisionId") val division: Division,
 )
 
-/**
- * Convert Network results to domain objects
- */
-/*fun NetworkElectionContainer.asDomainModel(): List<Election> {
-    return elections.map {
-        Election(
-            id = it.id,
-            name = it.name,
-            electionDay = it.electionDay,
-            division_id = it.division.id,
-            division_state = it.division.state,
-            division_country = it.division.country
-        )
-    }
-}*/
 
 /**
  * Convert Network results to database objects

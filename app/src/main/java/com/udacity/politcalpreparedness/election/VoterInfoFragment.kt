@@ -6,13 +6,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.udacity.politcalpreparedness.databinding.FragmentVoterInfoBinding
 import timber.log.Timber
 
+const val KEY_FOLLOW = "key_follow"
 
-class VoterInfoFragment : Fragment() {
+class VoterInfoFragment : androidx.fragment.app.Fragment() {
+    private var stateOfFollowButton = false
+
     /**
      * Lazily initialize our [OverviewViewModel].
      */
@@ -43,7 +45,7 @@ class VoterInfoFragment : Fragment() {
             loadUrlIntent(2)
         }
 
-        return binding.root
+
         //TODO: Add ViewModel values and create ViewModel
 
         //TODO: Add binding values
@@ -57,15 +59,35 @@ class VoterInfoFragment : Fragment() {
         //TODO: Handle loading of URLs
 
         //TODO: Handle save button UI state
+
+        if (savedInstanceState != null) {
+            stateOfFollowButton = savedInstanceState.getBoolean(KEY_FOLLOW)
+        }
+
+        viewModel.status.observe(this.viewLifecycleOwner, androidx.lifecycle.Observer { status ->
+            Timber.i("Timber: observe")
+            stateOfFollowButton = status.state
+        })
+
+
         //TODO: cont'd Handle save button clicks
 
+        return binding.root
     }
+
     private fun loadUrlIntent(state: Int) {
+        Timber.i("Timber: loadUrlIntent")
         val url = viewModel.getUrl(state)
-        Timber.i("Timber: url: " + url)
+
         val webIntent: Intent = Uri.parse(url).let { webpage ->
             Intent(Intent.ACTION_VIEW, webpage)
         }
         startActivity(webIntent)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        Timber.i("Timber: onSaveInstanceState")
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(KEY_FOLLOW, stateOfFollowButton)
     }
 }

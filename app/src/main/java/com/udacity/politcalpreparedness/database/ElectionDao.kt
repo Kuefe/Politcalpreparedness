@@ -1,8 +1,7 @@
 package com.udacity.politcalpreparedness.database
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.udacity.politcalpreparedness.network.models.Election
+
 
 @Dao
 interface ElectionDao {
@@ -12,8 +11,12 @@ interface ElectionDao {
     @Query("select * from election_table")
     fun getElections(): List<DatabaseElection>
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertSaved(vararg elections: DatabaseSavedElection)
 
     //TODO: Add delete query
+    @Delete
+    open fun deleteSavedElection(vararg election: DatabaseSavedElection?)
 
     //TODO: Add clean query
 
