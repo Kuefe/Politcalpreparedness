@@ -40,20 +40,12 @@ class VoterInfoViewModel(election: Election, application: Application) : ViewMod
     val ballotInfoUrl: LiveData<String>
         get() = _ballotInfoUrl
 
-    //TODO: Add var and methods to support loading URLs
-
-    //TODO: Add var and methods to save and remove elections to local database
-    //TODO: cont'd -- Populate initial state of save button to reflect proper action based on election saved status
     // The internal MutableLiveData that stores the status of the most recent request
     private val _status = MutableLiveData<FollowState>()
 
     // The external immutable LiveData for the request status
     val status: LiveData<FollowState>
         get() = _status
-
-    /**
-     * Hint: The saved state can be accomplished in multiple ways. It is directly related to how elections are saved/removed from the database.
-     */
 
     var address = ""
     var electionId = 0
@@ -66,6 +58,14 @@ class VoterInfoViewModel(election: Election, application: Application) : ViewMod
         electionId = _selectedElection.value!!.id
 
         _status.value = FollowState.FOLLOW
+        viewModelScope.launch {
+            try {
+                _status.value = voterInfoRepository.checkFollowElection(electionId)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Timber.i("Timber: " + e.message)
+            }
+        }
 
         getVoterInfosFromNetwork(address, electionId)
     }
@@ -110,7 +110,7 @@ class VoterInfoViewModel(election: Election, application: Application) : ViewMod
         }
     }
 
-    fun followElection(){
+    fun followElection() {
         Timber.i("Timber: followElection")
         viewModelScope.launch {
             try {

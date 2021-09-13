@@ -1,7 +1,9 @@
 package com.udacity.politcalpreparedness.election.repository
 
+import com.udacity.politcalpreparedness.database.DatabaseSavedElection
 import com.udacity.politcalpreparedness.database.ElectionDatabase
 import com.udacity.politcalpreparedness.database.asDatabaseModel
+import com.udacity.politcalpreparedness.election.FollowState
 import com.udacity.politcalpreparedness.network.models.Election
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -31,5 +33,20 @@ class VoterInfoRepository(private val database: ElectionDatabase) {
                 Timber.i("Timber: " + e.message)
             }
         }
+    }
+
+    suspend fun checkFollowElection(electionId: Int): FollowState {
+        Timber.i("Timber: checkFollowElection")
+        var status = FollowState.FOLLOW
+        withContext(Dispatchers.IO) {
+            try {
+                if (database.electionDao.checkIfFollow(electionId) != null) status = FollowState.UNFOLLOW
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+
+                Timber.i("Timber: " + e.message)
+            }
+        }
+        return status
     }
 }

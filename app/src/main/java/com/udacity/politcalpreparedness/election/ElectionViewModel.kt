@@ -10,6 +10,7 @@ import com.udacity.politcalpreparedness.election.repository.ElectionsRepository
 import com.udacity.politcalpreparedness.network.models.Election
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.lang.Exception
 
 //TODO: Construct ViewModel and provide election datasource
 class ElectionsViewModel(application: Application) : ViewModel() {
@@ -37,6 +38,7 @@ class ElectionsViewModel(application: Application) : ViewModel() {
      * twice.
      */
     fun displayPropertyDetailsComplete() {
+        Timber.i("Timber: displayPropertyDetailsComplete")
         _navigateToSelectedUpcomingElection.value = null
     }
 
@@ -64,22 +66,27 @@ class ElectionsViewModel(application: Application) : ViewModel() {
 
     init {
         Timber.i("Timber: init ElectionViewModel")
-        viewModelScope.launch {
-            try {
-                electionsRepository.getElectionsFromNetwork()
-                _upcomingElections.value = electionsRepository.getElectionList()
-            } catch (e: java.lang.Exception) {
-                _upcomingElections.value = ArrayList()
-            }
-        }
+        getUpcomingElections()
+    }
+
+    fun refreshFollowElection() {
         viewModelScope.launch {
             try {
                 _followElections.value = electionsRepository.getFollowElectionList()
-            } catch (e: java.lang.Exception) {
+            } catch (e: Exception) {
                 _followElections.value = ArrayList()
             }
         }
     }
 
-
+    private fun getUpcomingElections() {
+        viewModelScope.launch {
+            try {
+                electionsRepository.getElectionsFromNetwork()
+                _upcomingElections.value = electionsRepository.getElectionList()
+            } catch (e: Exception) {
+                _upcomingElections.value = ArrayList()
+            }
+        }
+    }
 }

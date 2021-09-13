@@ -1,16 +1,13 @@
 package com.udacity.politcalpreparedness.election
 
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.udacity.politcalpreparedness.databinding.FragmentElectionBinding
 import com.udacity.politcalpreparedness.election.adapter.ElectionListAdapter
 import com.udacity.politcalpreparedness.election.adapter.FollowElectionListAdapter
-import com.udacity.politcalpreparedness.network.models.Election
 
 class ElectionsFragment : Fragment() {
     /**
@@ -47,6 +44,7 @@ class ElectionsFragment : Fragment() {
 
         // Sets the adapter of the followed ElectionView RecyclerView with clickHandler lambda that
         // tells the viewModel when a election is clicked
+
         binding.savedRecycler.adapter =
             FollowElectionListAdapter(FollowElectionListAdapter.OnClickListener {
                 viewModel.displayVoterInfo(it)
@@ -58,11 +56,15 @@ class ElectionsFragment : Fragment() {
         viewModel.navigateToSelectedUpcomingElection.observe(viewLifecycleOwner, Observer {
             if (null != it) {
                 // Must find the NavController from the Fragment
-                this.findNavController().navigate(ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(it))
+                this.findNavController().navigate(
+                    ElectionsFragmentDirections.actionElectionsFragmentToVoterInfoFragment(it)
+                )
                 // Tell the ViewModel we've made the navigate call to prevent multiple navigation
                 viewModel.displayPropertyDetailsComplete()
             }
         })
+
+        viewModel.refreshFollowElection()
 
         return binding.root
     }
