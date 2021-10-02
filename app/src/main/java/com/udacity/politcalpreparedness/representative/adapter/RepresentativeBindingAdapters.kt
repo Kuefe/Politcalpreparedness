@@ -1,13 +1,14 @@
 package com.udacity.politcalpreparedness.representative.adapter
 
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.udacity.politcalpreparedness.R
 import com.udacity.politcalpreparedness.representative.model.Representative
 import timber.log.Timber
 
@@ -22,11 +23,22 @@ fun bindRecyclerView(recyclerView: RecyclerView, data: List<Representative>?) {
     }
 }
 
+/**
+ * Uses the Glide library to load an image by URL into an [ImageView]
+ */
 @BindingAdapter("profileImage")
 fun fetchImage(view: ImageView, src: String?) {
     src?.let {
         val uri = src.toUri().buildUpon().scheme("https").build()
-        //TODO: Add Glide call to load image and circle crop - user ic_profile as a placeholder and for errors.
+        Glide.with(view.context)
+            .load(uri)
+            .circleCrop()
+            .apply(
+                RequestOptions()
+                    .placeholder(R.drawable.ic_profile)
+                    .error(R.drawable.ic_profile)
+            )
+            .into(view)
     }
 }
 
