@@ -4,15 +4,18 @@ import android.content.Context
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.databinding.DataBindingUtil
+import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.udacity.politcalpreparedness.R
 import com.udacity.politcalpreparedness.databinding.FragmentRepresentativeBinding
 import com.udacity.politcalpreparedness.network.models.Address
-import java.util.Locale
+import com.udacity.politcalpreparedness.representative.adapter.RepresentativeListAdapter
+import timber.log.Timber
+import java.util.*
 
 class RepresentativeFragment : Fragment() {
 
@@ -20,34 +23,67 @@ class RepresentativeFragment : Fragment() {
         //TODO: Add Constant for Location request
     }
 
-    lateinit var viewModel: RepresentativeViewModel
-    private lateinit var binding: FragmentRepresentativeBinding
+    /**
+     * Lazily initialize our [RepresentativeViewModel].
+     */
+    private val viewModel: RepresentativeViewModel by lazy {
+        ViewModelProvider(this).get(RepresentativeViewModel::class.java)
+    }
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
-        // Inflate view and obtain an instance of the binding class
-        binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_representative,
-            container,
-            false
-        )
-        viewModel = ViewModelProvider(this).get(RepresentativeViewModel::class.java)
-        binding.viwModel = viewModel
-        binding.setLifecycleOwner(this)
+        val binding = FragmentRepresentativeBinding.inflate(inflater, container, false)
+
+        // Allows Data Binding to Observe LiveData with the lifecycle of this Fragment
+        binding.lifecycleOwner = this
+
+        binding.viewModel = viewModel
+
+        binding.state.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                viewModel.address.state = binding.state.selectedItem as String
+                Timber.i("Timber: onNothingSelected")
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                Timber.i("Timber: onItemSelected")
+                viewModel.address.state = binding.state.selectedItem as String
+                Timber.i("Timber: " + viewModel.address.state)
+            }
+        }
 
         //TODO: Define and assign Representative adapter
+        // Sets the adapter of the upcoming RepresentativeView RecyclerView
+        binding.representativeRecycler.adapter = RepresentativeListAdapter()
 
         //TODO: Populate Representative adapter
 
         //TODO: Establish button listeners for field and location search
+        binding.buttonSearch.setOnClickListener {
+            viewModel.getAddressFromIndividualFields()
+        }
+
+        binding.buttonLocation.setOnClickListener {
+            viewModel.getAddressFromGeoLocation()
+        }
 
         return binding.root
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         //TODO: Handle location permission result to get location on permission granted
     }
@@ -61,7 +97,7 @@ class RepresentativeFragment : Fragment() {
         }
     }
 
-    private fun isPermissionGranted() : Boolean {
+    private fun isPermissionGranted(): Boolean {
         //TODO: Check if permission is already granted and return (true = granted, false = denied/other)
         return true
     }
@@ -75,7 +111,13 @@ class RepresentativeFragment : Fragment() {
         val geocoder = Geocoder(context, Locale.getDefault())
         return geocoder.getFromLocation(location.latitude, location.longitude, 1)
             .map { address ->
-                Address(address.thoroughfare, address.subThoroughfare, address.locality, address.adminArea, address.postalCode)
+                Address(
+                    address.thoroughfare,
+                    address.subThoroughfare,
+                    address.locality,
+                    address.adminArea,
+                    address.postalCode
+                )
             }
             .first()
     }
@@ -84,5 +126,4 @@ class RepresentativeFragment : Fragment() {
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
     }
-
 }

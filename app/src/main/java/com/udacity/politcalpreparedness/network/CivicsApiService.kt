@@ -4,9 +4,10 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.udacity.politcalpreparedness.network.jsonadapter.DateAdapter
 import com.udacity.politcalpreparedness.network.jsonadapter.ElectionAdapter
-import com.udacity.politcalpreparedness.network.models.ElectionResponse
+import com.udacity.politcalpreparedness.network.models.RepresentativeResponse
 import com.udacity.politcalpreparedness.network.models.VoterInfoResponse
 import kotlinx.coroutines.Deferred
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
@@ -40,7 +41,10 @@ interface CivicsApiService {
         @Query("electionId") electionId: Int
     ): VoterInfoResponse
 
-    //TODO: Add representatives API Call
+    @GET("representatives")
+    suspend fun getRepresentatives(
+        @Query("address") address: String
+    ): RepresentativeResponse
 }
 
 object CivicsApi {
