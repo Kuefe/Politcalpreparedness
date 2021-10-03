@@ -110,4 +110,9 @@ class RepresentativeViewModel : ViewModel(), Observable {
             _representatives.value = listOfRepresentatives
         }
     }
+
+    // function to call the web, facebook or twitter
+    fun callSocialMediaChannel(channel: String) {
+        Timber.i("Timber: channel: " + channel)
+    }
 }

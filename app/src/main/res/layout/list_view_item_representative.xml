@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener"/>
         <variable
             name="representative"
             type="com.udacity.politcalpreparedness.representative.model.Representative" />
@@ -55,15 +57,15 @@
             android:id="@+id/web_image"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_www"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/facebook_image" />
+            app:layout_constraintEnd_toStartOf="@+id/facebook_image"
+            app:webImage="@{representative}" />
 
         <ImageView
             android:id="@+id/facebook_image"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_facebook"
+            app:faceBookImage="@{representative}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/twitter_image" />
 
@@ -71,7 +73,7 @@
             android:id="@+id/twitter_image"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_twitter"
+            app:twitterImage="@{representative}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

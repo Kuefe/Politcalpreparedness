@@ -11,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.udacity.politcalpreparedness.databinding.FragmentRepresentativeBinding
 import com.udacity.politcalpreparedness.network.models.Address
 import com.udacity.politcalpreparedness.representative.adapter.RepresentativeListAdapter
@@ -61,8 +62,7 @@ class RepresentativeFragment : Fragment() {
             }
         }
 
-        //TODO: Define and assign Representative adapter
-        // Sets the adapter of the upcoming RepresentativeView RecyclerView
+        // Sets the adapter of the RepresentativeView RecyclerView
         binding.representativeRecycler.adapter = RepresentativeListAdapter()
 
         //TODO: Populate Representative adapter

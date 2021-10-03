@@ -1,5 +1,6 @@
 package com.udacity.politcalpreparedness.representative.adapter
 
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Spinner
@@ -54,6 +55,43 @@ fun Spinner.setNewValue(value: String?) {
         setSelection(position)
     }
     Timber.i("Timber: position: " + position)
+}
+
+@BindingAdapter("webImage")
+fun ImageView.setWebImage(item: Representative) {
+    visibility = View.GONE
+    if (item.official.urls != null) {
+        visibility = View.VISIBLE
+        setImageResource(R.drawable.ic_www)
+    }
+}
+
+@BindingAdapter("faceBookImage")
+fun ImageView.setFacebookImage(item: Representative) {
+    val channels = item.official.channels
+    visibility = View.GONE
+    if (channels != null) {
+        for (channel in channels) {
+            if (channel.type == "Facebook") {
+                visibility = View.VISIBLE
+                setImageResource(R.drawable.ic_facebook)
+            }
+        }
+    }
+}
+
+@BindingAdapter("twitterImage")
+fun ImageView.setTwitterImage(item: Representative) {
+    visibility = View.GONE
+    val channels = item.official.channels
+    if (channels != null) {
+        for (channel in channels) {
+            if (channel.type == "Twitter") {
+                visibility = View.VISIBLE
+                setImageResource(R.drawable.ic_twitter)
+            }
+        }
+    }
 }
 
 inline fun <reified T> toTypedAdapter(adapter: ArrayAdapter<*>): ArrayAdapter<T> {
