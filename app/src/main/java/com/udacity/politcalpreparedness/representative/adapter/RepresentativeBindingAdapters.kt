@@ -6,6 +6,8 @@ import android.widget.ImageView
 import android.widget.Spinner
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingMethod
+import androidx.databinding.InverseBindingMethods
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -54,7 +56,6 @@ fun Spinner.setNewValue(value: String?) {
     if (position >= 0) {
         setSelection(position)
     }
-    Timber.i("Timber: position: " + position)
 }
 
 @BindingAdapter("webImage")

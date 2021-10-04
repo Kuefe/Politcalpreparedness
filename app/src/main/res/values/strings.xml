@@ -16,5 +16,6 @@
     <string name="city">City</string>
     <string name="zip">Zip</string>
     <string name="my_representatives">My Representatives</string>
+    <string name="the_permission_is_required_to_get_your_address">The permission is required to get your address</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>

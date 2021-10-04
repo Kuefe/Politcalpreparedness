@@ -61,8 +61,9 @@ class RepresentativeViewModel : ViewModel(), Observable {
      */
 
     //TODO: Create function get address from geo location
-    fun getAddressFromGeoLocation() {
-        Timber.i("Timber: getAddressFromGeoLocation")
+    fun getAddressFromGeoLocation(addressGeoLocation: Address) {
+        address = addressGeoLocation
+        getAddressFromIndividualFields()
     }
 
 
@@ -109,10 +110,5 @@ class RepresentativeViewModel : ViewModel(), Observable {
             }
             _representatives.value = listOfRepresentatives
         }
-    }
-
-    // function to call the web, facebook or twitter
-    fun callSocialMediaChannel(channel: String) {
-        Timber.i("Timber: channel: " + channel)
     }
 }
