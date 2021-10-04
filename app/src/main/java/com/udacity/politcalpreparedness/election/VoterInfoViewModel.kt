@@ -19,13 +19,11 @@ class VoterInfoViewModel(election: Election, application: Application) : ViewMod
     private val database = ElectionDatabase.getInstance(application)
     private val voterInfoRepository = VoterInfoRepository(database)
 
-    //TODO: Add live data to hold voter info
     private val _selectedElection = MutableLiveData<Election>()
 
     val selectedElection: LiveData<Election>
         get() = _selectedElection
 
-    //TODO: Add var and methods to populate voter info
     private val _voterInfo = MutableLiveData<VoterInfoResponse>()
 
     val voterInfo: LiveData<VoterInfoResponse>
@@ -51,7 +49,6 @@ class VoterInfoViewModel(election: Election, application: Application) : ViewMod
     var electionId = 0
 
     init {
-        Timber.i("Timber: init VoterInfoViewModel")
         _selectedElection.value = election
         address =
             _selectedElection.value?.division_state + " " + selectedElection.value?.division_country
@@ -63,7 +60,6 @@ class VoterInfoViewModel(election: Election, application: Application) : ViewMod
                 _status.value = voterInfoRepository.checkFollowElection(electionId)
             } catch (e: Exception) {
                 e.printStackTrace()
-                Timber.i("Timber: " + e.message)
             }
         }
 
@@ -78,7 +74,6 @@ class VoterInfoViewModel(election: Election, application: Application) : ViewMod
      * To actually load the Voterinfo for use, observe [voterinfo]
      */
     private fun getVoterInfosFromNetwork(address: String, electionId: Int) {
-        Timber.i("Timber: getVoterInfosFromNetwork")
         viewModelScope.launch {
             try {
                 _voterInfo.value = CivicsApi.retrofitService.getVoterInfo(address, electionId)
@@ -90,17 +85,15 @@ class VoterInfoViewModel(election: Election, application: Application) : ViewMod
                     _voterInfo.value?.state?.first()?.electionAdministrationBody?.electionInfoUrl
             } catch (e: Exception) {
                 e.printStackTrace()
-                Timber.i("Timber: " + e.message)
             }
         }
     }
 
-    fun getUrl(state: Int): String {
-        return if (state == 1) _votingLocationFinderUrl.value.toString() else _ballotInfoUrl.value.toString()
+    fun getUrl(state: Int): String? {
+        return if (state == 1) _votingLocationFinderUrl.value else _ballotInfoUrl.value
     }
 
     fun switchFollowState() {
-        Timber.i("Timber: switchFollowState")
         if (_status.value == FollowState.FOLLOW) {
             followElection()
             _status.value = FollowState.UNFOLLOW
@@ -111,7 +104,6 @@ class VoterInfoViewModel(election: Election, application: Application) : ViewMod
     }
 
     fun followElection() {
-        Timber.i("Timber: followElection")
         viewModelScope.launch {
             try {
                 voterInfoRepository.saveElection(_selectedElection.value!!)
@@ -122,7 +114,6 @@ class VoterInfoViewModel(election: Election, application: Application) : ViewMod
     }
 
     fun unfollowElection() {
-        Timber.i("Timber: unfollowElection")
         viewModelScope.launch {
             try {
                 voterInfoRepository.deleteElection(_selectedElection.value!!)

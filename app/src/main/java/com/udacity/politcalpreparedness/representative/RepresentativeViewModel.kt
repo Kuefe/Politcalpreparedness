@@ -14,16 +14,19 @@ import com.udacity.politcalpreparedness.network.models.Office
 import com.udacity.politcalpreparedness.network.models.Official
 import com.udacity.politcalpreparedness.representative.model.Representative
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
+enum class RepresentativeStatus { LOADING, ERROR, DONE }
 
 class RepresentativeViewModel : ViewModel(), Observable {
     private val propertyChangeRegistry = PropertyChangeRegistry()
 
     private val _representatives = MutableLiveData<List<Representative>>()
-
     val representatives: LiveData<List<Representative>>
         get() = _representatives
+
+    private val _status = MutableLiveData<RepresentativeStatus>()
+    val status: LiveData<RepresentativeStatus>
+        get() = _status
 
     //Get address from individual fields
     @Bindable
@@ -43,11 +46,6 @@ class RepresentativeViewModel : ViewModel(), Observable {
         propertyChangeRegistry.remove(callback)
     }
 
-    init {
-        Timber.i("Timber: init")
-    }
-
-
     /**
      *  The following code will prove helpful in constructing a representative from the API. T
      *  his code combines the two nodes of the RepresentativeResponse into a single official :
@@ -60,7 +58,6 @@ class RepresentativeViewModel : ViewModel(), Observable {
 
      */
 
-    //TODO: Create function get address from geo location
     fun getAddressFromGeoLocation(addressGeoLocation: Address) {
         address = addressGeoLocation
         getAddressFromIndividualFields()
@@ -69,32 +66,26 @@ class RepresentativeViewModel : ViewModel(), Observable {
 
     // Create function to get address from individual fields
     fun getAddressFromIndividualFields() {
-        Timber.i("Timber: getAddressFromIndividualFields")
         var query = address.line1 + " "
         query += address.line2 + " "
         query += address.zip + " "
         query += address.city + " "
         query += address.state
-        Timber.i("Timber: query: " + query)
-        viewModelScope.launch {
-            try {
-                getRepresentativeFromNetwork(query)
-            } catch (e: Exception) {
-
-            }
-        }
+        getRepresentativeFromNetwork(query)
     }
 
     // function to fetch representatives from API from a provided address
     private fun getRepresentativeFromNetwork(address: String) {
+        _status.value = RepresentativeStatus.LOADING
         viewModelScope.launch {
             try {
                 val (offices, officials) =
                     CivicsApi.retrofitService.getRepresentatives(address)
                 createListOfRepresentatives(offices, officials)
+                _status.value = RepresentativeStatus.DONE
             } catch (e: Exception) {
                 e.printStackTrace()
-                Timber.i(e.message)
+                _status.value = RepresentativeStatus.ERROR
             }
         }
     }

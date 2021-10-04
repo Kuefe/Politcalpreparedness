@@ -24,6 +24,11 @@ interface ElectionDao {
     @Delete
     open fun deleteSavedElection(vararg election: DatabaseSavedElection?)
 
-    //TODO: Add clean query
-
+    /**
+     * Deletes all values from the table.
+     *
+     * This does not delete the table, only its contents.
+     */
+    @Query("DELETE FROM election_table")
+    suspend fun clear()
 }

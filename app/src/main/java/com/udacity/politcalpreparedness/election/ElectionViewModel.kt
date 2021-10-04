@@ -1,6 +1,8 @@
 package com.udacity.politcalpreparedness.election
 
 import android.app.Application
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,9 +12,8 @@ import com.udacity.politcalpreparedness.election.repository.ElectionsRepository
 import com.udacity.politcalpreparedness.network.models.Election
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.lang.Exception
 
-//TODO: Construct ViewModel and provide election datasource
+
 class ElectionsViewModel(application: Application) : ViewModel() {
     private val database = getInstance(application)
     private val electionsRepository = ElectionsRepository(database)
@@ -38,7 +39,6 @@ class ElectionsViewModel(application: Application) : ViewModel() {
      * twice.
      */
     fun displayPropertyDetailsComplete() {
-        Timber.i("Timber: displayPropertyDetailsComplete")
         _navigateToSelectedUpcomingElection.value = null
     }
 
@@ -49,10 +49,6 @@ class ElectionsViewModel(application: Application) : ViewModel() {
     fun displayVoterInfo(election: Election) {
         _navigateToSelectedUpcomingElection.value = election
     }
-
-    //TODO: Create val and functions to populate live data for upcoming elections from the API and saved elections from local database
-
-    //TODO: Create functions to navigate to saved or upcoming election voter info
 
     private val _upcomingElections = MutableLiveData<List<Election>>()
 
@@ -65,7 +61,6 @@ class ElectionsViewModel(application: Application) : ViewModel() {
         get() = _followElections
 
     init {
-        Timber.i("Timber: init ElectionViewModel")
         getUpcomingElections()
     }
 

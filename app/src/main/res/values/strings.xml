@@ -17,5 +17,5 @@
     <string name="zip">Zip</string>
     <string name="my_representatives">My Representatives</string>
     <string name="the_permission_is_required_to_get_your_address">The permission is required to get your address</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="no_election_information_found">No election information found</string>
 </resources>

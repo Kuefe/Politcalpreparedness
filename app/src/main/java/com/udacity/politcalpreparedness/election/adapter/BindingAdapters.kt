@@ -50,3 +50,4 @@ fun setFollowText(button: Button, status: FollowState) {
             context.getText(R.string.unfollow_election)
         else context.getText(R.string.follow_election)
 }
+

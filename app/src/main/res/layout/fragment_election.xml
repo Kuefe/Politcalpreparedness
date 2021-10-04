@@ -47,5 +47,6 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:listdataFollow="@{viewModel.followElections}"
             tools:listitem="@layout/list_view_item_follow" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.udacity.politcalpreparedness.network.models.Election
 
-//TODO: Create Factory to generate ElectionViewModel with provided election datasource
 /**
  * Simple ViewModel factory that provides the context to the ViewModel.
  */

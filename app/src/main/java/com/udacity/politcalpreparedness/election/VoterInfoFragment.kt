@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.udacity.politcalpreparedness.R
 import com.udacity.politcalpreparedness.databinding.FragmentVoterInfoBinding
 import timber.log.Timber
 
@@ -45,48 +47,30 @@ class VoterInfoFragment : androidx.fragment.app.Fragment() {
             loadUrlIntent(2)
         }
 
-
-        //TODO: Add ViewModel values and create ViewModel
-
-        //TODO: Add binding values
-
-        //TODO: Populate voter info -- hide views without provided data.
-        /**
-        Hint: You will need to ensure proper data is provided from previous fragment.
-         */
-
-
-        //TODO: Handle loading of URLs
-
-        //TODO: Handle save button UI state
-
         if (savedInstanceState != null) {
             stateOfFollowButton = savedInstanceState.getBoolean(KEY_FOLLOW)
         }
 
         viewModel.status.observe(this.viewLifecycleOwner, androidx.lifecycle.Observer { status ->
-            Timber.i("Timber: observe")
             stateOfFollowButton = status.state
         })
-
-
-        //TODO: cont'd Handle save button clicks
 
         return binding.root
     }
 
     private fun loadUrlIntent(state: Int) {
-        Timber.i("Timber: loadUrlIntent")
         val url = viewModel.getUrl(state)
-
-        val webIntent: Intent = Uri.parse(url).let { webpage ->
-            Intent(Intent.ACTION_VIEW, webpage)
+        if (url.isNullOrEmpty()) {
+            Toast.makeText(context, getString(R.string.no_election_information_found), Toast.LENGTH_SHORT).show()
+        } else {
+            val webIntent: Intent = Uri.parse(url).let { webpage ->
+                Intent(Intent.ACTION_VIEW, webpage)
+            }
+            startActivity(webIntent)
         }
-        startActivity(webIntent)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        Timber.i("Timber: onSaveInstanceState")
         super.onSaveInstanceState(outState)
         outState.putBoolean(KEY_FOLLOW, stateOfFollowButton)
     }

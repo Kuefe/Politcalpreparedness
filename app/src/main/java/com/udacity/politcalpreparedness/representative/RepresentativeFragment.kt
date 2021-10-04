@@ -26,7 +26,6 @@ import java.util.*
 class RepresentativeFragment : Fragment() {
 
     companion object {
-        //TODO: Add Constant for Location request
         private val REQUEST_LOCATION_PERMISSION = 1
     }
 
@@ -61,7 +60,6 @@ class RepresentativeFragment : Fragment() {
         binding.state.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 viewModel.address.state = binding.state.selectedItem as String
-                Timber.i("Timber: onNothingSelected")
             }
 
             override fun onItemSelected(
@@ -70,25 +68,19 @@ class RepresentativeFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                Timber.i("Timber: onItemSelected")
                 viewModel.address.state = binding.state.selectedItem as String
-                Timber.i("Timber: " + viewModel.address.state)
             }
         }
 
         // Sets the adapter of the RepresentativeView RecyclerView
         binding.representativeRecycler.adapter = RepresentativeListAdapter()
 
-        //TODO: Populate Representative adapter
-
-        //TODO: Establish button listeners for field and location search
         binding.buttonSearch.setOnClickListener {
             viewModel.getAddressFromIndividualFields()
         }
 
         binding.buttonLocation.setOnClickListener {
             checkLocationPermissions()
-            Timber.i("Timber: address: " + address)
             viewModel.getAddressFromGeoLocation(address)
         }
 
@@ -100,8 +92,6 @@ class RepresentativeFragment : Fragment() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        //TODO: Handle location permission result to get location on permission granted
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 getLocation()
@@ -116,12 +106,9 @@ class RepresentativeFragment : Fragment() {
     }
 
     private fun checkLocationPermissions() {
-        Timber.i("Timber: checkLocationPermissions")
         if (isPermissionGranted()) {
-            Timber.i("Timber: Permission is already granted")
             getLocation()
         } else {
-            Timber.i("Timber: checkLocationPermissions requestPermissions")
             if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
                 // In an educational UI, explain to the user why your app requires this
                 // permission for a specific feature to behave as expected. In this UI,
@@ -149,8 +136,6 @@ class RepresentativeFragment : Fragment() {
 
     @SuppressLint("MissingPermission")
     private fun getLocation() {
-        Timber.i("Timber: getLocation")
-        //TODO: Get location from LocationServices
         val locationResult = fusedLocationProviderClient.lastLocation
         locationResult.addOnCompleteListener(requireActivity()) { task ->
             if (task.isSuccessful) {
@@ -163,8 +148,6 @@ class RepresentativeFragment : Fragment() {
                 Toast.makeText(context, "Sorry, no address found", Toast.LENGTH_LONG).show()
             }
         }
-
-        //TODO: The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
     }
 
     private fun geoCodeLocation(location: Location): Address {
@@ -181,9 +164,4 @@ class RepresentativeFragment : Fragment() {
             }
             .first()
     }
-//
-//    private fun hideKeyboard() {
-//        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
-//    }
 }

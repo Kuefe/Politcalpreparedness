@@ -6,9 +6,10 @@ import com.udacity.politcalpreparedness.network.asDatabaseModel
 import com.udacity.politcalpreparedness.network.models.Election
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
+
 
 class ElectionsRepository(private val database: ElectionDatabase) {
+
 
     /**
      * get a List of elections from the database an transform then to a domain object
@@ -42,14 +43,12 @@ class ElectionsRepository(private val database: ElectionDatabase) {
      * To actually load the elections for use, observe [elections]
      */
     suspend fun getElectionsFromNetwork() {
-        Timber.i("Timber: getElections")
         withContext(Dispatchers.IO) {
             try {
                 val election = CivicsApi.retrofitService.getElections()
                 database.electionDao.insertAll(*election.asDatabaseModel())
             } catch (e: Exception) {
                 e.printStackTrace()
-                Timber.i(e.message)
             }
         }
     }

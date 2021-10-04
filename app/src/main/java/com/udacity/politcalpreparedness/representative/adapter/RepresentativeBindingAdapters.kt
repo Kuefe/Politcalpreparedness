@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.udacity.politcalpreparedness.R
+import com.udacity.politcalpreparedness.representative.RepresentativeStatus
 import com.udacity.politcalpreparedness.representative.model.Representative
 import timber.log.Timber
 
@@ -47,7 +48,6 @@ fun fetchImage(view: ImageView, src: String?) {
 
 @BindingAdapter("stateValue")
 fun Spinner.setNewValue(value: String?) {
-    Timber.i("Timber: setNewValue")
     val adapter = toTypedAdapter<String>(this.adapter as ArrayAdapter<*>)
     val position = when (adapter.getItem(0)) {
         is String -> adapter.getPosition(value)
@@ -91,6 +91,29 @@ fun ImageView.setTwitterImage(item: Representative) {
                 visibility = View.VISIBLE
                 setImageResource(R.drawable.ic_twitter)
             }
+        }
+    }
+}
+
+/**
+ * This binding adapter displays the [RepresentativeStatus] of the network request in an image view.  When
+ * the request is loading, it displays a loading_animation.  If the request has an error, it
+ * displays a broken image to reflect the connection error.  When the request is finished, it
+ * hides the image view.
+ */
+@BindingAdapter("representativeStatus")
+fun bindStatus(statusImageView: ImageView, status: RepresentativeStatus?) {
+    when (status) {
+        RepresentativeStatus.LOADING -> {
+            statusImageView.visibility = View.VISIBLE
+            statusImageView.setImageResource(R.drawable.loading_animation)
+        }
+        RepresentativeStatus.ERROR -> {
+            statusImageView.visibility = View.VISIBLE
+            statusImageView.setImageResource(R.drawable.ic_connection_error)
+        }
+        RepresentativeStatus.DONE -> {
+            statusImageView.visibility = View.GONE
         }
     }
 }
