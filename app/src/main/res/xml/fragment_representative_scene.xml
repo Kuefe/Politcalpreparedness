@@ -5,7 +5,7 @@
     <ConstraintSet android:id="@+id/start">
         <Constraint
             android:id="@+id/search_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toTopOf="parent" />
@@ -62,7 +62,7 @@
     <ConstraintSet android:id="@+id/end">
         <Constraint
             android:id="@id/search_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             motion:layout_constraintBottom_toTopOf="@id/address_line_1"
             motion:layout_constraintStart_toStartOf="parent" />

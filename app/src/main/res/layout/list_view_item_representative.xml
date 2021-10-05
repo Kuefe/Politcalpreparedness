@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="clickListener"
-            type="android.view.View.OnClickListener"/>
+            type="android.view.View.OnClickListener" />
+
         <variable
             name="representative"
             type="com.udacity.politcalpreparedness.representative.model.Representative" />
@@ -20,6 +22,8 @@
             android:id="@+id/photo_image"
             android:layout_width="0dp"
             android:layout_height="64dp"
+            android:paddingTop="@dimen/default_padding"
+            android:paddingEnd="@dimen/default_padding"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_profile"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,8 +34,10 @@
             android:id="@+id/office_name_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingTop="@dimen/default_padding"
             android:text="@{representative.office.name}"
-            app:layout_constraintStart_toEndOf="@+id/photo_image"
+            android:textAppearance="?textAppearanceSubtitle2"
+            app:layout_constraintStart_toEndOf="@id/photo_image"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="office_name_text" />
 
@@ -73,10 +79,9 @@
             android:id="@+id/twitter_image"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            app:twitterImage="@{representative}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
+            app:layout_constraintEnd_toEndOf="parent"
+            app:twitterImage="@{representative}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

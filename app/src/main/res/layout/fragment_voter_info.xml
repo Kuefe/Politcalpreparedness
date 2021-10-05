@@ -16,76 +16,91 @@
         android:layout_height="match_parent"
         tools:context="com.example.android.politicalpreparedness.MainActivity">
 
-        <androidx.appcompat.widget.Toolbar
+        <TextView
             android:id="@+id/election_name"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:padding="@dimen/default_padding"
-            android:singleLine="true"
-            android:title="@{viewModel.selectedElection.name}"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="@{viewModel.selectedElection.name}"
+            android:textAppearance="?textAppearanceHeadline6"
+            app:layout_constraintEnd_toStartOf="@id/end_grid"
+            app:layout_constraintStart_toEndOf="@id/start_grid"
+            app:layout_constraintTop_toBottomOf="@id/top_grid" />
 
         <TextView
             android:id="@+id/election_date"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/default_padding"
             android:text="@{String.valueOf(viewModel.selectedElection.electionDay)}"
+            app:layout_constraintEnd_toStartOf="@id/end_grid"
+            app:layout_constraintStart_toEndOf="@id/start_grid"
             app:layout_constraintTop_toBottomOf="@id/election_name"
             tools:text="12 November 2055" />
 
-         <TextView
+        <TextView
             android:id="@+id/state_header"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/election_information"
-            app:layout_constraintStart_toStartOf="@id/election_date"
+            android:textAppearance="?textAppearanceSubtitle1"
+            app:layout_constraintEnd_toStartOf="@id/end_grid"
+            app:layout_constraintStart_toEndOf="@id/start_grid"
             app:layout_constraintTop_toBottomOf="@id/election_date" />
 
         <TextView
             android:id="@+id/state_locations"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/voting_locations"
-            app:layout_constraintStart_toStartOf="@id/election_date"
+            app:layout_constraintEnd_toStartOf="@id/end_grid"
+            app:layout_constraintStart_toEndOf="@id/start_grid"
             app:layout_constraintTop_toBottomOf="@id/state_header" />
 
         <TextView
             android:id="@+id/state_ballot"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/ballot_information"
-            app:layout_constraintStart_toStartOf="@id/election_date"
+            app:layout_constraintEnd_toStartOf="@id/end_grid"
+            app:layout_constraintStart_toEndOf="@id/start_grid"
             app:layout_constraintTop_toBottomOf="@id/state_locations" />
-
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/address_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:constraint_referenced_ids="state_correspondence_header,address" />
-
-        <TextView
-            android:id="@+id/state_correspondence_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/election_date"
-            app:layout_constraintTop_toBottomOf="@id/state_ballot" />
-
-        <TextView
-            android:id="@+id/address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/election_date"
-            app:layout_constraintTop_toBottomOf="@id/state_correspondence_header" />
 
         <Button
             android:id="@+id/follow_button"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:onClick="@{() -> viewModel.switchFollowState()}"
             android:text=".followButton}"
             app:followButton="@{viewModel.status}"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintEnd_toStartOf="@id/end_grid"
+            app:layout_constraintStart_toEndOf="@id/start_grid"
+            app:layout_constraintBottom_toBottomOf="@id/bottom_grid" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/start_grid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/spacing_normal" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/end_grid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/spacing_normal" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/top_grid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="@dimen/default_padding" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottom_grid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="@dimen/default_padding" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
