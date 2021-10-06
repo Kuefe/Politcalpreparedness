@@ -10,8 +10,9 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:contentDescription="@string/ballot"
+        android:scaleType="fitCenter"
         android:src="@drawable/ballot_logo"
         app:layout_constraintBottom_toTopOf="@+id/upcoming_button"
         app:layout_constraintEnd_toStartOf="@id/end_grid"
