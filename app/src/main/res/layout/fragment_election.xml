@@ -11,74 +11,85 @@
 
     </data>
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".election.ElectionsFragment">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/upcoming_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/upcoming_elections"
-                android:textAppearance="?textAppearanceHeadline6"
-                app:layout_constraintEnd_toStartOf="@id/end_grid"
-                app:layout_constraintStart_toEndOf="@id/start_grid"
-                app:layout_constraintTop_toTopOf="@id/top_grid" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/upcoming_recycler"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/upcoming_text"
-                app:listdata="@{viewModel.upcomingElections}"
-                tools:listitem="@layout/list_view_item" />
+                android:layout_height="match_parent"
+                tools:context=".election.ElectionsFragment">
 
-            <TextView
-                android:id="@+id/saved_text"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/saved_elections"
-                android:textAppearance="?textAppearanceHeadline6"
-                app:layout_constraintEnd_toStartOf="@id/end_grid"
-                app:layout_constraintStart_toEndOf="@id/start_grid"
-                app:layout_constraintTop_toBottomOf="@id/upcoming_recycler" />
+                <TextView
+                    android:id="@+id/upcoming_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/upcoming_elections"
+                    android:textAppearance="?textAppearanceHeadline6"
+                    app:layout_constraintEnd_toStartOf="@id/end_grid"
+                    app:layout_constraintStart_toEndOf="@id/start_grid"
+                    app:layout_constraintTop_toTopOf="@id/top_grid" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/saved_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/saved_text"
-                app:listdataFollow="@{viewModel.followElections}"
-                tools:listitem="@layout/list_view_item_follow" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/upcoming_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/upcoming_text"
+                    app:listdata="@{viewModel.upcomingElections}"
+                    tools:listitem="@layout/list_view_item" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/start_grid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/spacing_normal" />
+                <TextView
+                    android:id="@+id/saved_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/saved_elections"
+                    android:textAppearance="?textAppearanceHeadline6"
+                    app:layout_constraintEnd_toStartOf="@id/end_grid"
+                    app:layout_constraintStart_toEndOf="@id/start_grid"
+                    app:layout_constraintTop_toBottomOf="@id/upcoming_recycler" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/end_grid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_end="@dimen/spacing_normal" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/saved_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/saved_text"
+                    app:listdataFollow="@{viewModel.followElections}"
+                    tools:listitem="@layout/list_view_item_follow" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/top_grid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_begin="@dimen/default_padding" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/start_grid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="@dimen/spacing_normal" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/end_grid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="@dimen/spacing_normal" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/top_grid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_begin="@dimen/default_padding" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+        <ImageView
+            electionStatus="@{viewModel.status}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
 </layout>

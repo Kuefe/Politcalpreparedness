@@ -84,6 +84,17 @@ class RepresentativeFragment : Fragment() {
             viewModel.getAddressFromGeoLocation(address)
         }
 
+        // Show a toast when no representatives for the state
+        viewModel.status.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            if (it == RepresentativeStatus.ERROR) {
+                Toast.makeText(
+                    context,
+                    getString(R.string.no_representatives_found),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+
         return binding.root
     }
 

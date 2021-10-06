@@ -1,5 +1,7 @@
 package com.udacity.politcalpreparedness.representative
 
+import android.content.Context
+import android.widget.Toast
 import androidx.databinding.Bindable
 import androidx.databinding.Observable
 import androidx.databinding.PropertyChangeRegistry

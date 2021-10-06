@@ -109,8 +109,7 @@ fun bindStatus(statusImageView: ImageView, status: RepresentativeStatus?) {
             statusImageView.setImageResource(R.drawable.loading_animation)
         }
         RepresentativeStatus.ERROR -> {
-            statusImageView.visibility = View.VISIBLE
-            statusImageView.setImageResource(R.drawable.ic_connection_error)
+            statusImageView.visibility = View.GONE
         }
         RepresentativeStatus.DONE -> {
             statusImageView.visibility = View.GONE

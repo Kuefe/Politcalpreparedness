@@ -1,8 +1,6 @@
 package com.udacity.politcalpreparedness.election
 
 import android.app.Application
-import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,12 +9,16 @@ import com.udacity.politcalpreparedness.database.ElectionDatabase.Companion.getI
 import com.udacity.politcalpreparedness.election.repository.ElectionsRepository
 import com.udacity.politcalpreparedness.network.models.Election
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
+enum class ElectionStatus { LOADING, ERROR, DONE }
 
 class ElectionsViewModel(application: Application) : ViewModel() {
     private val database = getInstance(application)
     private val electionsRepository = ElectionsRepository(database)
+
+    private val _status = MutableLiveData<ElectionStatus>()
+    val status: LiveData<ElectionStatus>
+        get() = _status
 
     /**
      * Variable that tells the Fragment to navigate to a specific [VoterInfoFragment]
@@ -75,12 +77,16 @@ class ElectionsViewModel(application: Application) : ViewModel() {
     }
 
     private fun getUpcomingElections() {
+
         viewModelScope.launch {
+            _status.value = ElectionStatus.LOADING
             try {
                 electionsRepository.getElectionsFromNetwork()
                 _upcomingElections.value = electionsRepository.getElectionList()
+                _status.value = ElectionStatus.DONE
             } catch (e: Exception) {
                 _upcomingElections.value = ArrayList()
+                _status.value = ElectionStatus.ERROR
             }
         }
     }

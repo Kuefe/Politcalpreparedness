@@ -1,13 +1,11 @@
 package com.udacity.politcalpreparedness.election.repository
 
-import com.udacity.politcalpreparedness.database.DatabaseSavedElection
 import com.udacity.politcalpreparedness.database.ElectionDatabase
 import com.udacity.politcalpreparedness.database.asDatabaseModel
 import com.udacity.politcalpreparedness.election.FollowState
 import com.udacity.politcalpreparedness.network.models.Election
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 class VoterInfoRepository(private val database: ElectionDatabase) {
 
@@ -35,7 +33,10 @@ class VoterInfoRepository(private val database: ElectionDatabase) {
         var status = FollowState.FOLLOW
         withContext(Dispatchers.IO) {
             try {
-                if (database.electionDao.checkIfFollow(electionId) != null) status = FollowState.UNFOLLOW
+                @Suppress("SENSELESS_COMPARISON")
+                if (database.electionDao.checkIfFollow(electionId) != null) {
+                    status = FollowState.UNFOLLOW
+                }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
             }

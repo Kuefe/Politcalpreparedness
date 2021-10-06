@@ -1,12 +1,7 @@
 package com.udacity.politcalpreparedness.election
 
-import android.content.Context.CONNECTIVITY_SERVICE
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.*
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider

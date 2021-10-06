@@ -22,7 +22,7 @@ interface ElectionDao {
     fun checkIfFollow(key: Int): DatabaseSavedElection
 
     @Delete
-    open fun deleteSavedElection(vararg election: DatabaseSavedElection?)
+    fun deleteSavedElection(vararg election: DatabaseSavedElection?)
 
     /**
      * Deletes all values from the table.
