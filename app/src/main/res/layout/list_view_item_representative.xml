@@ -24,7 +24,7 @@
             android:layout_height="64dp"
             android:paddingTop="@dimen/default_padding"
             android:paddingEnd="@dimen/default_padding"
-            android:scaleType="centerCrop"
+            android:scaleType="centerInside"
             android:src="@drawable/ic_profile"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
