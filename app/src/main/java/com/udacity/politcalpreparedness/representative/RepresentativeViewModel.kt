@@ -86,6 +86,7 @@ class RepresentativeViewModel : ViewModel(), Observable {
             } catch (e: Exception) {
                 e.printStackTrace()
                 _status.value = RepresentativeStatus.ERROR
+                _representatives.value = null
             }
         }
     }
